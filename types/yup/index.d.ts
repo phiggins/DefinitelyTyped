@@ -70,8 +70,6 @@ export interface Schema<T, C = object> {
     strict(isStrict: boolean): this;
     strip(strip: boolean): this;
     withMutation(fn: (current: this) => void): void;
-    default(value: any): this;
-    default(): T;
     typeError(message?: TestOptionsMessage): this;
     notOneOf(arrayOfValues: any[], message?: MixedLocale['notOneOf']): this;
     when(keys: string | any[], builder: WhenOptions<this>): this;
@@ -115,6 +113,8 @@ export interface MixedSchema<T extends any = {} | null | undefined, C = object> 
     test(name: string, message: TestOptionsMessage, test: TestFunction<unknown, C>): this;
     test<U extends T = T>(options: AssertingTestOptions<U, Record<string, any>, C>): MixedSchema<U, C>;
     test(options: TestOptions<Record<string, any>, C>): this;
+    default<U extends T>(value: U | (() => U)): U extends undefined ? MixedSchema<T, C> : MixedSchema<Exclude<T, undefined>, C>;
+    default(): T;
 }
 
 export interface StringSchemaConstructor {
@@ -169,6 +169,8 @@ export interface StringSchema<T extends string | null | undefined = string | und
     test<U extends T = T>(options: AssertingTestOptions<U, Record<string, any>, C>): StringSchema<U, C>;
     test(options: TestOptions<Record<string, any>, C>): this;
     optional(): StringSchema<T | undefined, C>;
+    default<U extends T>(value: U | (() => U)): U extends undefined ? StringSchema<T, C> : StringSchema<Exclude<T, undefined>, C>;
+    default(): T;
 }
 
 export interface NumberSchemaConstructor {
@@ -212,6 +214,8 @@ export interface NumberSchema<T extends number | null | undefined = number | und
     test<U extends T = T>(options: AssertingTestOptions<U, Record<string, any>, C>): NumberSchema<U, C>;
     test(options: TestOptions<Record<string, any>, C>): this;
     optional(): NumberSchema<T | undefined, C>;
+    default<U extends T>(value: U | (() => U)): U extends undefined ? NumberSchema<T, C> : NumberSchema<Exclude<T, undefined>, C>;
+    default(): T;
 }
 
 export interface BooleanSchemaConstructor {
@@ -246,6 +250,8 @@ export interface BooleanSchema<T extends boolean | null | undefined = boolean | 
     test<U extends T = T>(options: AssertingTestOptions<U, Record<string, any>, C>): BooleanSchema<U, C>;
     test(options: TestOptions<Record<string, any>, C>): this;
     optional(): BooleanSchema<T | undefined, C>;
+    default<U extends T>(value: U | (() => U)): U extends undefined ? BooleanSchema<T, C> : BooleanSchema<Exclude<T, undefined>, C>;
+    default(): T;
 }
 
 export interface DateSchemaConstructor {
@@ -281,6 +287,8 @@ export interface DateSchema<T extends Date | string | null | undefined = Date | 
     test<U extends T = T>(options: AssertingTestOptions<U, Record<string, any>, C>): DateSchema<U, C>;
     test(options: TestOptions<Record<string, any>, C>): this;
     optional(): DateSchema<T | undefined, C>;
+    default<U extends T>(value: U | (() => U)): U extends undefined ? DateSchema<T, C> : DateSchema<Exclude<T, undefined>, C>;
+    default(): T;
 }
 
 export interface ArraySchemaConstructor {
@@ -409,6 +417,8 @@ export interface ObjectSchema<T extends object | null | undefined = object | und
     ): ObjectSchema<U, C>;
     test<U extends T = T>(options: AssertingTestOptions<U, Record<string, any>, C>): ObjectSchema<U, C>;
     test(options: TestOptions<Record<string, any>, C>): this;
+    default<U extends T>(value: U | (() => U)): U extends undefined ? ObjectSchema<T, C> : ObjectSchema<Exclude<T, undefined>, C>;
+    default(): T;
 }
 
 export type TestFunction<T = unknown, C = object> = (
